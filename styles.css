@@ -375,3 +375,36 @@ footer {
     margin-top: 1rem;
   }
 }
+
+/* Botão voltar ao topo */
+.back-to-top {
+  position: fixed;
+  right: 20px;
+  bottom: 24px;
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 18px rgba(2,6,23,0.12);
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.22s ease, transform 0.22s ease;
+  z-index: 220;
+}
+
+.back-to-top.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.back-to-top i { font-size: 0.95rem; }
+
+@media (max-width: 480px) {
+  .back-to-top { right: 14px; bottom: 18px; width:40px; height:40px; }
+}
