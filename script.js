@@ -76,3 +76,113 @@ if (backToTop) {
   // verificação inicial
   checkScrollBottom();
 }
+
+// Atualiza opacidade do degradê conforme o usuário rola a página
+function updateBackgroundGradient() {
+  const doc = document.documentElement;
+  const scrollTop = window.scrollY || window.pageYOffset;
+  const maxScroll = doc.scrollHeight - window.innerHeight;
+  const progress = Math.max(0, Math.min(1, (scrollTop / (maxScroll || 1))));
+  // queremos que o degradê vá de 0 (top) até 1 (fim)
+  doc.style.setProperty('--gradient-opacity', String(progress));
+}
+
+window.addEventListener('scroll', updateBackgroundGradient, { passive: true });
+window.addEventListener('resize', updateBackgroundGradient);
+// inicializa valor
+updateBackgroundGradient();
+
+// --- Bubble effect: generate small bubbles and move them subtly on scroll ---
+const bubblesWrapper = document.getElementById('bubbles-wrapper');
+const bubbles = [];
+function createBubbles(count = 18) {
+  if (!bubblesWrapper) return;
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+  for (let i = 0; i < count; i++) {
+    const el = document.createElement('div');
+    el.className = 'bubble';
+    // random size class
+    const size = Math.random();
+    if (size < 0.4) el.classList.add('small');
+    else if (size < 0.8) el.classList.add('medium');
+    else el.classList.add('large');
+
+    // random initial position
+    const left = Math.round(Math.random() * (width + 200) - 100); // allow beyond edges
+    const top = Math.round(Math.random() * (height + 200) - 100);
+
+    // speed factor controls how much bubble moves relative to scroll
+    // Aumentado: velocidade mais alta por padrão (range 0.4 - 1.2)
+    const speed = 0.4 + Math.random() * 0.8;
+    const drift = (Math.random() - 0.5) * 40; // horizontal drift amplitude
+
+    el.style.left = left + 'px';
+    el.style.top = top + 'px';
+    bubblesWrapper.appendChild(el);
+    bubbles.push({ el, left, top, speed, drift });
+  }
+}
+
+function updateBubblesOnScroll() {
+  if (!bubblesWrapper || bubbles.length === 0) return;
+  const scrollY = window.scrollY || window.pageYOffset;
+  const maxScroll = document.documentElement.scrollHeight - window.innerHeight || 1;
+  const progress = Math.max(0, Math.min(1, scrollY / maxScroll));
+
+  // move each bubble up as user scrolls, with slight horizontal sinusoidal drift
+  bubbles.forEach((b, i) => {
+    const moveY = -progress * (200 + b.speed * 600); // upward movement
+    const xOsc = Math.sin((progress * 6 + i) * (1 + b.speed)) * b.drift;
+    b.el.style.transform = `translate(${xOsc}px, ${moveY}px)`;
+    // fade slightly as near end
+    b.el.style.opacity = String(0.9 - progress * 0.6);
+  });
+}
+
+// initialize bubbles and wire scroll
+createBubbles(20);
+window.addEventListener('scroll', updateBubblesOnScroll, { passive: true });
+window.addEventListener('resize', () => {
+  // reposition bubbles on resize so they stay within viewport
+  const w = window.innerWidth;
+  const h = window.innerHeight;
+  bubbles.forEach(b => {
+    b.left = Math.max(-100, Math.min(w + 100, b.left));
+    b.top = Math.max(-100, Math.min(h + 100, b.top));
+    b.el.style.left = b.left + 'px';
+    b.el.style.top = b.top + 'px';
+  });
+});
+// initial update
+updateBubblesOnScroll();
+
+// Continuous animation loop so bubbles move even without scroll
+let _animStart = null;
+function animateBubbles(timestamp) {
+  if (!_animStart) _animStart = timestamp;
+  const t = (timestamp - _animStart) / 1000; // seconds
+  const scrollY = window.scrollY || window.pageYOffset;
+  const maxScroll = document.documentElement.scrollHeight - window.innerHeight || 1;
+  const progress = Math.max(0, Math.min(1, scrollY / maxScroll));
+
+  bubbles.forEach((b, i) => {
+    // time-based subtle motion
+    const timeX = Math.sin(t * (0.3 + b.speed * 2) + i) * (b.drift * 0.6);
+    const timeY = Math.cos(t * (0.15 + b.speed) + i) * (12 * b.speed);
+
+    // scroll-driven upward movement
+    const moveY = -progress * (200 + b.speed * 600);
+    const xOsc = Math.sin((progress * 6 + i) * (1 + b.speed)) * b.drift;
+
+    const totalX = xOsc + timeX;
+    const totalY = moveY + timeY;
+
+    b.el.style.transform = `translate(${totalX}px, ${totalY}px)`;
+    b.el.style.opacity = String(0.9 - progress * 0.6);
+  });
+
+  requestAnimationFrame(animateBubbles);
+}
+
+requestAnimationFrame(animateBubbles);
