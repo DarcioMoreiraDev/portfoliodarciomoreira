@@ -5,6 +5,9 @@
   box-sizing: border-box;
 }
 
+/* Import de fonte estilo Minecraft (Press Start 2P) */
+/* A fonte é carregada pelo link em index.html */
+
 /* Variáveis de tema */
 :root {
   --bg: #ffffff;
@@ -140,6 +143,18 @@ header {
 .hero h1 {
   font-size: 2.25rem;
   margin-bottom: 1rem;
+}
+
+/* Aplicar fonte estilo Minecraft ao heading principal */
+.minecraft-heading {
+  font-family: 'Press Start 2P', system-ui, monospace;
+  letter-spacing: 0.02em;
+  font-weight: 400;
+  color: var(--text);
+}
+
+@media (min-width: 768px) {
+  .minecraft-heading { font-size: 2.5rem; }
 }
 
 /* Parágrafo descritivo */
