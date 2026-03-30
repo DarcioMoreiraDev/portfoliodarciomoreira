@@ -56,3 +56,23 @@ if (themeToggle) {
     setTheme(prefersDark ? 'dark' : 'light');
   }
 })();
+
+// Botão "Voltar ao topo" — aparece quando o usuário chega ao fim da página
+const backToTop = document.getElementById('back-to-top');
+function checkScrollBottom() {
+  if (!backToTop) return;
+  const atBottom = (window.innerHeight + window.scrollY) >= (document.documentElement.scrollHeight - 40);
+  if (atBottom) backToTop.classList.add('visible');
+  else backToTop.classList.remove('visible');
+}
+
+window.addEventListener('scroll', checkScrollBottom, { passive: true });
+window.addEventListener('resize', checkScrollBottom);
+
+if (backToTop) {
+  backToTop.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // verificação inicial
+  checkScrollBottom();
+}
