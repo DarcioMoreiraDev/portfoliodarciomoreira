@@ -25,3 +25,34 @@ form.addEventListener('submit', function(event) {
 
   form.reset();
 });
+
+// Tema escuro / claro: toggle e persistência
+const themeToggle = document.getElementById('theme-toggle');
+function updateToggleIcon() {
+  if (!themeToggle) return;
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  themeToggle.innerHTML = isDark ? '<i class="fa-solid fa-moon"></i>' : '<i class="fa-solid fa-sun"></i>';
+}
+
+function setTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  localStorage.setItem('theme', theme);
+  updateToggleIcon();
+}
+
+if (themeToggle) {
+  themeToggle.addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-theme') || 'light';
+    setTheme(current === 'dark' ? 'light' : 'dark');
+  });
+}
+
+// Inicializa tema salvo ou prefereências do sistema
+(function initTheme() {
+  const saved = localStorage.getItem('theme');
+  if (saved) setTheme(saved);
+  else {
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    setTheme(prefersDark ? 'dark' : 'light');
+  }
+})();
