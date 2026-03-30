@@ -83,24 +83,34 @@
           <!-- CARD 1 - COM LINK -->
           <a href="https://darciomoreiradev.github.io/Gerenciamento-de-Candidaturas/" target="_blank"
             style="text-decoration: none; color: inherit;">
-            <div class="projeto-card">
+            <div class="projeto-card" tabindex="0"
+              data-title="Gerenciamento de Candidaturas"
+              data-desc="Protótipo de Gerenciamento de Candidaturas: cadastro, listagem e filtros. Desenvolvido para demonstrar arquitetura de front/back e fluxos de dados."
+              data-image="assets/projetojs.png"
+              data-link="https://darciomoreiradev.github.io/Gerenciamento-de-Candidaturas/">
               <img src="assets/projetojs.png" alt="Projeto 1">
               <h3>Gerenciamento de Candidaturas</h3>
-              <p>Este site é um protótipo de Gerenciamento de Candidaturas, desenvolvido exclusivamente para fins de estudo e portfólio.
-
-O objetivo é demonstrar habilidades em desenvolvimento web, organização de fluxos de cadastro, interface intuitiva e lógica de gestão de dados, simulando como um sistema real de recrutamento poderia funcionar.</p>
+              <p>Este site é um protótipo de Gerenciamento de Candidaturas, desenvolvido exclusivamente para fins de estudo e portfólio.</p>
             </div>
           </a>
 
           <!-- CARD 2 - SEM LINK -->
-          <div class="projeto-card">
+          <div class="projeto-card" tabindex="0"
+            data-title="Dashboard React"
+            data-desc="Dashboard com visualizações e integração a APIs. Implementa autenticação e widgets de monitoramento."
+            data-image="assets/projeto2.jpg"
+            data-link="#">
             <img src="assets/projeto2.jpg" alt="Projeto 2">
             <h3>Projeto 2</h3>
             <p>Dashboard com React.</p>
           </div>
 
           <!-- CARD 3 - SEM LINK -->
-          <div class="projeto-card">
+          <div class="projeto-card" tabindex="0"
+            data-title="Clone de Portfólio"
+            data-desc="Clone responsivo de portfólio com foco em performance e acessibilidade."
+            data-image="assets/projeto3.jpg"
+            data-link="#">
             <img src="assets/projeto3.jpg" alt="Projeto 3">
             <h3>Projeto 3</h3>
             <p>Clone de portfólio responsivo.</p>
@@ -138,6 +148,19 @@ O objetivo é demonstrar habilidades em desenvolvimento web, organização de fl
 
   <script src="script.js" defer></script>
   <button id="back-to-top" class="back-to-top" aria-label="Voltar ao topo"><i class="fa-solid fa-arrow-up"></i></button>
+  <!-- Project preview modal -->
+  <div id="project-modal" class="project-modal" aria-hidden="true">
+    <div class="project-modal__backdrop" data-close="true"></div>
+    <div class="project-modal__content" role="dialog" aria-modal="true">
+      <button class="project-modal__close" aria-label="Fechar">&times;</button>
+      <img src="" alt="" class="project-modal__image">
+      <div class="project-modal__meta">
+        <h3 class="project-modal__title"></h3>
+        <p class="project-modal__desc"></p>
+        <a class="project-modal__link" href="#" target="_blank">Ver projeto</a>
+      </div>
+    </div>
+  </div>
 </body>
 
 </html>

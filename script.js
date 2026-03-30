@@ -186,3 +186,61 @@ function animateBubbles(timestamp) {
 }
 
 requestAnimationFrame(animateBubbles);
+
+// --- Project cards: tilt on mousemove and modal preview ---
+const projectCards = Array.from(document.querySelectorAll('.projeto-card'));
+const modal = document.getElementById('project-modal');
+const modalImage = modal && modal.querySelector('.project-modal__image');
+const modalTitle = modal && modal.querySelector('.project-modal__title');
+const modalDesc = modal && modal.querySelector('.project-modal__desc');
+const modalLink = modal && modal.querySelector('.project-modal__link');
+
+function handleCardMove(e) {
+  const el = e.currentTarget;
+  const rect = el.getBoundingClientRect();
+  const px = (e.clientX - rect.left) / rect.width; // 0..1
+  const py = (e.clientY - rect.top) / rect.height;
+  const rotateY = (px - 0.5) * 8; // degrees
+  const rotateX = (0.5 - py) * 6;
+  el.style.transform = `translateY(-6px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+}
+
+function handleCardLeave(e) {
+  const el = e.currentTarget;
+  el.style.transform = '';
+}
+
+function openProjectModal(card) {
+  if (!modal) return;
+  const title = card.dataset.title || '';
+  const desc = card.dataset.desc || '';
+  const image = card.dataset.image || '';
+  const link = card.dataset.link || '#';
+  modalImage.src = image;
+  modalImage.alt = title;
+  modalTitle.textContent = title;
+  modalDesc.textContent = desc;
+  modalLink.href = link;
+  modal.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeProjectModal() {
+  if (!modal) return;
+  modal.setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = '';
+}
+
+projectCards.forEach(card => {
+  card.addEventListener('mousemove', handleCardMove);
+  card.addEventListener('mouseleave', handleCardLeave);
+  card.addEventListener('click', () => openProjectModal(card));
+  card.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') openProjectModal(card); });
+});
+
+if (modal) {
+  modal.addEventListener('click', (e) => {
+    if (e.target.matches('[data-close]') || e.target.classList.contains('project-modal__close')) closeProjectModal();
+  });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeProjectModal(); });
+}
