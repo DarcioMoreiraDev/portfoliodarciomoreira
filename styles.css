@@ -399,6 +399,71 @@ footer {
   font-size: 0.9rem;
 }
 
+/* Menu toggle (mobile) */
+.menu-toggle {
+  display: none;
+  background: transparent;
+  border: none;
+  font-size: 1.25rem;
+  cursor: pointer;
+  color: var(--text);
+}
+
+/* Responsive navbar: hide list and show toggle on small screens
+   Use max-height + opacity transitions for a smooth open/close animation. */
+@media (max-width: 768px) {
+  .nav-bar {
+    padding: 0.5rem 1rem;
+    position: relative;
+  }
+
+  .logo {
+    font-size: 1rem;
+    max-width: 60%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .nav-bar ul {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 0 1rem;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    background: var(--surface);
+    box-shadow: 0 6px 18px rgba(2,6,23,0.08);
+    z-index: 150;
+    max-height: 0; /* collapsed */
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(-6px);
+    transition: max-height 320ms cubic-bezier(.2,.8,.2,1), opacity 220ms ease, transform 260ms ease;
+    pointer-events: none;
+  }
+
+  .nav-bar li + li { margin-left: 0; }
+
+  .nav-bar li { margin: 0.2rem 0; }
+
+  .nav-bar a { display: block; padding: 0.6rem 0.4rem; border-radius: 6px; }
+
+  .menu-toggle { display: inline-flex; align-items: center; gap: 0.5rem; }
+
+  /* when open, allow interaction and expand */
+  .nav-bar.nav-open ul {
+    max-height: 420px; /* large enough to show items; safe upper bound */
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .theme-toggle { margin-left: 0.5rem; }
+}
+
 /* Botão de alternar tema */
 .theme-toggle {
   background: transparent;
