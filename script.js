@@ -57,6 +57,46 @@ if (themeToggle) {
   }
 })();
 
+// Menu responsivo: toggle off-canvas em mobile
+const menuToggle = document.getElementById('menu-toggle');
+const navBar = document.querySelector('.nav-bar');
+const navLinks = document.querySelector('.nav-bar ul');
+
+if (menuToggle) {
+  menuToggle.addEventListener('click', (e) => {
+    const expanded = menuToggle.getAttribute('aria-expanded') === 'true';
+    menuToggle.setAttribute('aria-expanded', String(!expanded));
+    document.body.classList.toggle('nav-open');
+  });
+
+  // Close when a link is clicked (mobile)
+  if (navLinks) {
+    navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+      menuToggle.setAttribute('aria-expanded', 'false');
+      document.body.classList.remove('nav-open');
+    }));
+  }
+
+  // Close on Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && document.body.classList.contains('nav-open')) {
+      document.body.classList.remove('nav-open');
+      menuToggle.setAttribute('aria-expanded', 'false');
+    }
+  });
+
+  // Close when clicking outside the nav
+  document.addEventListener('click', (e) => {
+    if (!document.body.classList.contains('nav-open')) return;
+    const target = e.target;
+    const clickInside = navBar && navBar.contains(target);
+    if (!clickInside) {
+      document.body.classList.remove('nav-open');
+      menuToggle.setAttribute('aria-expanded', 'false');
+    }
+  });
+}
+
 // Botão "Voltar ao topo" — aparece quando o usuário chega ao fim da página
 const backToTop = document.getElementById('back-to-top');
 function checkScrollBottom() {
@@ -186,47 +226,6 @@ function animateBubbles(timestamp) {
 }
 
 requestAnimationFrame(animateBubbles);
-
-// --- Mobile menu toggle ---
-const menuToggle = document.getElementById('menu-toggle');
-const navBar = document.querySelector('.nav-bar');
-const navList = navBar && navBar.querySelector('ul');
-
-function closeMenu() {
-  if (!navBar) return;
-  navBar.classList.remove('nav-open');
-    if (menuToggle) {
-      menuToggle.setAttribute('aria-expanded', 'false');
-      menuToggle.innerHTML = '<i class="fa-solid fa-bars"></i>';
-    }
-}
-
-if (menuToggle && navBar) {
-  menuToggle.addEventListener('click', () => {
-      const open = navBar.classList.toggle('nav-open');
-      menuToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-      // alterna ícone entre hamburguer e fechar (X)
-      if (open) menuToggle.innerHTML = '<i class="fa-solid fa-xmark"></i>';
-      else menuToggle.innerHTML = '<i class="fa-solid fa-bars"></i>';
-  });
-
-  // close when a nav link is clicked
-  if (navList) {
-    navList.addEventListener('click', (e) => {
-      if (e.target.tagName === 'A') closeMenu();
-    });
-  }
-
-  // close on resize to desktop
-  window.addEventListener('resize', () => {
-    if (window.innerWidth > 768) closeMenu();
-  });
-
-  // close when clicking outside
-  document.addEventListener('click', (e) => {
-    if (!navBar.contains(e.target) && navBar.classList.contains('nav-open')) closeMenu();
-  });
-}
 
 // --- Project cards: tilt on mousemove and modal preview ---
 const projectCards = Array.from(document.querySelectorAll('.projeto-card'));

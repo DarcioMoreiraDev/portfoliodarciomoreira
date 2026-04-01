@@ -43,7 +43,7 @@ html {
 
 /* Estilo geral do corpo do site */
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   background: var(--bg);
   color: var(--text);
   line-height: 1.6;
@@ -103,6 +103,47 @@ header {
 .nav-bar ul {
   display: flex;
   list-style: none;
+}
+
+/* Menu toggle (mobile) */
+.menu-toggle {
+  background: transparent;
+  border: none;
+  color: var(--text);
+  font-size: 1.15rem;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .menu-toggle { display: inline-flex; }
+
+  .nav-bar ul {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    width: 260px;
+    transform: translateX(100%);
+    transition: transform 280ms ease;
+    display: flex;
+    flex-direction: column;
+    padding: 3.5rem 1.25rem;
+    gap: 1.25rem;
+    background: var(--surface);
+    box-shadow: -8px 0 30px rgba(2,6,23,0.12);
+    z-index: 200;
+  }
+
+  body.nav-open .nav-bar ul { transform: translateX(0); }
+
+  /* Remove horizontal spacing between items on mobile */
+  .nav-bar ul li + li { margin-left: 0; }
+
+  .nav-bar ul a { font-size: 1.05rem; }
 }
 
 /* Espaçamento entre os itens da lista */
@@ -167,12 +208,29 @@ header {
   margin-bottom: 1rem;
 }
 
-/* Aplicar fonte estilo Minecraft ao heading principal */
+
+/* Heading principal usa agora a fonte do sistema */
 .minecraft-heading {
   font-family: 'Press Start 2P', system-ui, monospace;
   letter-spacing: 0.02em;
   font-weight: 400;
   color: var(--text);
+}
+
+/* Linhas decorativas sob títulos de seção (conforme exemplo) */
+.container h2 {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 0.6rem;
+}
+.container h2::after {
+  content: '';
+  display: block;
+  height: 3px;
+  width: 68px;
+  background: linear-gradient(90deg, rgba(var(--primary-rgb),1), rgba(var(--secondary-rgb),1));
+  border-radius: 3px;
+  margin-top: 0.45rem;
 }
 
 @media (min-width: 768px) {
@@ -397,71 +455,6 @@ footer {
   padding: 2rem;
   color: var(--footer);
   font-size: 0.9rem;
-}
-
-/* Menu toggle (mobile) */
-.menu-toggle {
-  display: none;
-  background: transparent;
-  border: none;
-  font-size: 1.25rem;
-  cursor: pointer;
-  color: var(--text);
-}
-
-/* Responsive navbar: hide list and show toggle on small screens
-   Use max-height + opacity transitions for a smooth open/close animation. */
-@media (max-width: 768px) {
-  .nav-bar {
-    padding: 0.5rem 1rem;
-    position: relative;
-  }
-
-  .logo {
-    font-size: 1rem;
-    max-width: 60%;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .nav-bar ul {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    padding: 0 1rem;
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 100%;
-    background: var(--surface);
-    box-shadow: 0 6px 18px rgba(2,6,23,0.08);
-    z-index: 150;
-    max-height: 0; /* collapsed */
-    overflow: hidden;
-    opacity: 0;
-    transform: translateY(-6px);
-    transition: max-height 320ms cubic-bezier(.2,.8,.2,1), opacity 220ms ease, transform 260ms ease;
-    pointer-events: none;
-  }
-
-  .nav-bar li + li { margin-left: 0; }
-
-  .nav-bar li { margin: 0.2rem 0; }
-
-  .nav-bar a { display: block; padding: 0.6rem 0.4rem; border-radius: 6px; }
-
-  .menu-toggle { display: inline-flex; align-items: center; gap: 0.5rem; }
-
-  /* when open, allow interaction and expand */
-  .nav-bar.nav-open ul {
-    max-height: 420px; /* large enough to show items; safe upper bound */
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
-  }
-
-  .theme-toggle { margin-left: 0.5rem; }
 }
 
 /* Botão de alternar tema */
